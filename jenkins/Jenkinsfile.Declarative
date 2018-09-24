@@ -50,7 +50,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh 'env'
-                sh 'pwd && ls -ltra && ls -ltra ../target'
+                sh 'pwd && ls -ltra && ls -ltra target'
                 sh """
                     cp -p target/my-app-${VERSION}.jar ${APP_NAME}-${VERSION}.jar
                     docker build --no-cache=true --build-arg BUILD_DATE=${BUILD_DATE} --build-arg VCS_REF=${SHORTREV} --build-arg BUILD_VERSION=${VERSION} --build-arg JAR_FILE=${APP_NAME}-${VERSION}.jar -t ${APP_NAME}:${TAG} .
