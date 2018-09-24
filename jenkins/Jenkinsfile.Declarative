@@ -54,7 +54,7 @@ pipeline {
                     sh 'pwd && ls -ltra && ls -ltra ../target'
                     sh """
                         cp -p ../target/my-app-${VERSION}.jar ${APP_NAME}-${VERSION}.jar
-                        docker build --no-cache=true --build-arg BUILD_DATE=${BUILD_DATE} --build-arg VCS_REF=${SHORTREV} --build-arg BUILD_VERSION=${VERSION} --build-arg JAR_FILE=${APP_NAME}-${VERSION}.jar -t ${APP_NAME}:${TAG} .
+                        sudo docker build --no-cache=true --build-arg BUILD_DATE=${BUILD_DATE} --build-arg VCS_REF=${SHORTREV} --build-arg BUILD_VERSION=${VERSION} --build-arg JAR_FILE=${APP_NAME}-${VERSION}.jar -t ${APP_NAME}:${TAG} .
                     """
                 }
             }
@@ -72,10 +72,10 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'jenkins', passwordVariable: 'REGISTRY_PASS', usernameVariable: 'REGISTRY_USER')]) {
                     sh """
-                        docker login -u ${REGISTRY_USER} -p ${REGISTRY_PASS} ${REGISTRY_URL}
-                        docker image tag ${APP_NAME}:${TAG} ${DTR_REGISTRY}/jenkins/${APP_NAME}:${TAG}
-                        docker image push ${DTR_REGISTRY}/${REGISTRY_USER}/${APP_NAME}:${TAG}
-                        docker image rm ${DTR_REGISTRY}/${REGISTRY_USER}/${APP_NAME}:${TAG}
+                        sudo docker login -u ${REGISTRY_USER} -p ${REGISTRY_PASS} ${REGISTRY_URL}
+                        sudo docker image tag ${APP_NAME}:${TAG} ${DTR_REGISTRY}/jenkins/${APP_NAME}:${TAG}
+                        sudo docker image push ${DTR_REGISTRY}/${REGISTRY_USER}/${APP_NAME}:${TAG}
+                        sudo docker image rm ${DTR_REGISTRY}/${REGISTRY_USER}/${APP_NAME}:${TAG}
                     """
                 }
             }
