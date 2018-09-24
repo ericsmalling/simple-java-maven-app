@@ -63,7 +63,7 @@ pipeline {
         stage('Test Docker Image') {
             steps {
                 sh """
-                    docker run ${APP_NAME}:${TAG}
+                    sudo docker run ${APP_NAME}:${TAG}
                 """
             }
         }
