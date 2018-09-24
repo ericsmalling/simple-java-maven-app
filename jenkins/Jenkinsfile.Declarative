@@ -12,15 +12,10 @@ pipeline {
         TAG = ''
         VERSION = ''
     }
-    options {
-        skipDefaultCheckout true
-    }
 
     stages {
         stage('Checkout') {
             steps {
-                sh 'ls -ltra'
-                sh 'git clone https://github.com/stevejr/simple-java-maven-app .'
                 script {
                     SHORTREV = sh (returnStdout: true, script: 'git rev-parse --short HEAD').trim()
                 }
@@ -30,7 +25,6 @@ pipeline {
         }
 
         stage('Build') {
-            agent{ docker 'maven:3-alpine' }
             steps {
                 sh 'env'
                 script {
