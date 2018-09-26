@@ -33,15 +33,14 @@ pipeline {
                     [$class: 'StringBinding', credentialsId: 'dct_repo_passphrase', variable: 'REPOSITORY_SIGNING_PASSPHRASE'],
                     [$class: 'UsernamePasswordMultiBinding', credentialsId: 'jenkins', usernameVariable: 'REGISTRY_USER', passwordVariable: 'REGISTRY_PASS']]) {
 
-                        withEnv(["DOCKER_CONTENT_TRUST=1",
-                            "DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE=$ROOT_SIGNING_PASSPHRASE",
-                            "DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE=$REPOSITORY_SIGNING_PASSPHRASE"]) {
-                            sh """
-                                sudo docker ${DOCKER_OPTS} image tag ${DTR_REGISTRY}/${TARGET_IMAGE}:${TARGET_TAG} ${DTR_REGISTRY}/${TARGET_IMAGE}:${TARGET_TAG}-signed
-                                sudo docker ${DOCKER_OPTS} image push ${DTR_REGISTRY}/${TARGET_IMAGE}:${TARGET_TAG}-signed
-                                sudo docker ${DOCKER_OPTS} trust inspect --pretty ${DTR_REGISTRY}/${TARGET_IMAGE}:${TARGET_TAG}-signed
-                            """
-                        }
+                    withEnv(["DOCKER_CONTENT_TRUST=1",
+                        "DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE=$ROOT_SIGNING_PASSPHRASE",
+                        "DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE=$REPOSITORY_SIGNING_PASSPHRASE"]) {
+                        sh """
+                            sudo docker ${DOCKER_OPTS} image tag ${DTR_REGISTRY}/${TARGET_IMAGE}:${TARGET_TAG} ${DTR_REGISTRY}/${TARGET_IMAGE}:${TARGET_TAG}-signed
+                            sudo docker ${DOCKER_OPTS} image push ${DTR_REGISTRY}/${TARGET_IMAGE}:${TARGET_TAG}-signed
+                            sudo docker ${DOCKER_OPTS} trust inspect --pretty ${DTR_REGISTRY}/${TARGET_IMAGE}:${TARGET_TAG}-signed
+                        """
                     }
                 }
             }
