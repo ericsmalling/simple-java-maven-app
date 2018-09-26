@@ -6,7 +6,6 @@ def podLabel = "worker-${UUID.randomUUID().toString()}"
 pipeline {
     agent any
     environment {
-        DOCKER_OPTS = ""
         REGISTRY_URL = "https://${DTR_REGISTRY}"
         SOURCE_IMAGE = "${payload.contents.sourceRepository}"
         SOURCE_TAG = "${payload.contents.sourceTag}"
